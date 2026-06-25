@@ -1,96 +1,169 @@
 # Smart Flashcard Generator
 
-Smart Flashcard Generator is a full-stack, responsive web application that uses Natural Language Processing (NLP) to convert raw study notes into interactive flashcards. It implements user registration/login, spaced repetition schedules for optimal learning retention, and a modern glassmorphic dark-mode user interface.
+Smart Flashcard Generator is a full-stack, responsive web application that uses Natural Language Processing (NLP) to convert raw study notes into interactive flashcards. It features user authentication, spaced repetition scheduling for optimal learning retention, and a modern glassmorphic dark-mode UI.
+
+---
+
+## Selected Assignment Option
+
+**Option A — Smart Flashcard Generator**
+
+Build a tool that helps students convert their study notes into flashcards automatically using
+NLP, then review them.
+---
+
+## Technology Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | Vanilla HTML5, CSS3, ES6 JavaScript |
+| Backend | FastAPI + Uvicorn |
+| Database | MongoDB Atlas via Motor (async) |
+| Authentication | JWT (python-jose) + bcrypt password hashing |
+| NLP | NLTK, Hugging Face Inference API (httpx) |
+| Deployment | Railway (production), GitHub (version control) |
+
+---
 
 ## Core Features
 
-1. **User Authentication**: Sign up and log in securely. Passwords are hashed using `bcrypt` and sessions are verified using JSON Web Tokens (JWT).
-2. **AI Flashcard Generation**: Paste or type a paragraph of study notes (50 to 5000 characters). The backend parses the text using:
-   - **NLTK sentence segmentation** to split the text.
-   - **TF-IDF Keyword ranking** (scikit-learn) and **NLTK Named Entity Recognition** to select optimal answers.
-   - **Hugging Face transformers** (`valhalla/t5-small-qg-hl` model) to generate context-aware questions for the answers.
-   - **Cloze (Fill-in-the-blank) fallback** if the transformers model fails or is loading, ensuring 100% reliability.
-3. **Interactive Spaced Repetition**: Review cards one-by-one with a smooth 3D flip card effect. Mark cards as **"Known"** or **"Not Known"**.
-   - **Weighted random selection** determines future card appearances.
-   - **Known** cards have their weight halved (min 0.1), showing up less frequently.
-   - **Not Known** cards have their weight doubled (max 5.0), showing up more frequently.
-4. **Editable Previews**: Add, edit, or delete individual cards in the generation preview workbench before saving them.
-5. **Dashboard Management**: Track progress percentages and relative timestamps for all saved study decks on a responsive grid dashboard.
+1. **User Authentication** — Secure signup and login. Passwords are hashed with `bcrypt` and sessions are managed with JSON Web Tokens (JWT).
+
+2. **AI Flashcard Generation** — Paste study notes (50–5000 characters). The NLP pipeline:
+   - Splits text into sentences using NLTK sentence tokenisation.
+   - Extracts keywords using frequency-based ranking (pure Python, no heavy dependencies).
+   - Extracts named entities using POS tag-based NER (proper noun detection).
+   - Extracts noun phrases using NLTK RegexpParser.
+   - Generates questions via the **Hugging Face Inference API** (`google/flan-t5-small`) using `httpx` for lightweight HTTP calls.
+   - Falls back to rule-based question generation and cloze (fill-in-the-blank) questions when the API is unavailable.
+
+3. **Interactive Spaced Repetition** — Review cards one-by-one with a 3D flip card animation. Mark cards as **Known** or **Not Known**.
+   - Known cards have their weight halved (min 0.1), appearing less frequently.
+   - Not Known cards have their weight doubled (max 5.0), appearing more frequently.
+
+4. **Editable Preview** — Add, edit, or delete cards in the generation workbench before saving.
+
+5. **Dashboard** — Track progress percentages and timestamps for all saved decks on a responsive grid.
 
 ---
 
-## Tech Stack
-
-- **Frontend**: Vanilla HTML5, CSS3 (Midnight Scholar theme), ES6 Javascript.
-- **Backend**: FastAPI + Uvicorn (lifespan configuration).
-- **Database**: MongoDB Atlas via Motor async driver.
-- **NLP Library**: NLTK, scikit-learn, Hugging Face Transformers.
-
----
-
-## Installation & Setup
+## Local Setup Instructions
 
 ### Prerequisites
-- Python 3.9+ installed.
-- A MongoDB Atlas connection string (or local MongoDB connection).
+- Python 3.9+
+- A MongoDB Atlas account (free tier is sufficient)
+- A Hugging Face account with an API token (free tier)
 
-### 1. Clone the project
-Navigate into your project folder:
+### 1. Clone the repository
 ```bash
-cd GISUL_PROJECT
+git clone https://github.com/Aswin-k61/flashcard.git
+cd flashcard
 ```
 
-### 2. Configure Environment variables
-Create a `.env` file in the `backend/` directory:
+### 2. Configure environment variables
+Create a `.env` file in the project root:
 ```env
 MONGODB_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/flashcard_db?retryWrites=true&w=majority
-JWT_SECRET=3b8a1c9db9ef8f0b75a1c8f85f3c9e6de8b5ef83a9d20c5d6e7f8a9b0c1d2e3f
+JWT_SECRET=<generate with: python -c "import secrets; print(secrets.token_hex(32))">
 JWT_ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=1440
+HF_TOKEN=<your Hugging Face API token from huggingface.co/settings/tokens>
 ```
-*Note: Replace `MONGODB_URL` with your actual MongoDB Atlas cluster free-tier connection string. Generate a secure secret key with `python -c "import secrets; print(secrets.token_hex(32))"` and set it as `JWT_SECRET`.*
 
-### 3. Create a Virtual Environment & Install Dependencies
-Run the following commands in your shell to set up the backend:
+### 3. Install dependencies
 ```bash
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment (Windows)
-venv\Scripts\activate
-
-# Install requirements
-pip install -r backend/requirements.txt
+pip install -r requirements.txt
 ```
-*(On first load of the generation feature, the system will automatically download NLTK data components and cache the Hugging Face `valhalla/t5-small-qg-hl` model ~242MB. Make sure you are connected to the internet.)*
 
----
-
-## Running the Application
-
-Start the backend server using Uvicorn:
+### 4. Run the application
 ```bash
-cd backend
-uvicorn main:app --reload --port 8000
+uvicorn backend.main:app --reload --port 8000
 ```
 
-Once the server is running, open your web browser and visit:
-**[http://localhost:8000](http://localhost:8000)**
-
-This will serve the frontend client directly.
+Open your browser at **http://localhost:8000**
 
 ---
 
 ## API Documentation
 
-FastAPI provides interactive Swagger documentation automatically:
-- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
-- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+FastAPI provides interactive documentation automatically:
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
 
-### Key Endpoints:
-- `POST /api/auth/signup`: Create a new account.
-- `POST /api/auth/login`: Authenticate and receive a JWT access token.
-- `POST /api/flashcards/generate`: Run NLP pipeline to create flashcards from text.
-- `GET /api/flashcards/sets`: Retrieve user's flashcard sets with statistics.
-- `GET /api/review/{set_id}/next`: Fetch the next card to review using weighted random selection.
-- `PATCH /api/review/{card_id}`: Update review status ("known" / "not_known") to adjust spaced repetition weights.
+### Key Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/signup` | Create a new account |
+| POST | `/api/auth/login` | Authenticate and receive a JWT token |
+| POST | `/api/flashcards/generate` | Run NLP pipeline on study notes |
+| GET | `/api/flashcards/sets` | Retrieve all flashcard sets for the user |
+| GET | `/api/review/{set_id}/next` | Get next card using weighted random selection |
+| PATCH | `/api/review/{card_id}` | Update card weight (known / not known) |
+
+---
+
+## AI/ML Implementation — Changes Made
+
+The original implementation loaded the `valhalla/t5-small-qg-hl` transformer model (~242MB) and `scikit-learn` directly on the server. This caused **out-of-memory crashes** on free-tier cloud hosts (512MB RAM limit).
+
+### Problem
+- Loading PyTorch + Transformers consumed ~400MB RAM on startup.
+- `scikit-learn` (numpy + scipy) added another ~200MB.
+- Together they exceeded the 512MB free-tier limit on every cold start.
+
+### Changes Made
+
+| Before | After | Reason |
+|---|---|---|
+| `transformers` + `torch` loaded locally | Hugging Face **Inference API** via `httpx` | Offloads model compute to HF servers; zero RAM cost locally |
+| `scikit-learn` TF-IDF vectoriser | Pure Python `Counter`-based frequency ranking | Eliminates numpy/scipy dependency (~200MB saved) |
+| `nltk.ne_chunk` (requires numpy) | POS tag-based proper noun detection | Removes numpy dependency entirely |
+| `InferenceClient` from `huggingface_hub` | Direct `httpx.post` to HF REST API | Lighter dependency chain |
+| NLTK downloads at runtime | NLTK downloads at **build time** (`render_build.sh`) | Faster cold starts, no repeated downloads |
+
+### Current NLP Pipeline
+
+```
+Input text
+    │
+    ▼
+Sentence tokenisation (NLTK)
+    │
+    ├──▶ Keyword extraction (Counter frequency ranking)
+    ├──▶ Named entity extraction (POS tag NNP/NNPS detection)
+    └──▶ Noun phrase extraction (NLTK RegexpParser)
+              │
+              ▼
+        Candidate filtering & deduplication
+              │
+              ▼
+        Question generation (per candidate)
+              │
+        ┌─────┴─────┐
+        ▼           ▼
+   HF API call   Rule-based fallback
+   (flan-t5-small)  (pattern matching)
+        │           │
+        └─────┬─────┘
+              ▼
+        Cloze fallback (fill-in-the-blank)
+              │
+              ▼
+        Deduplication (Jaccard similarity)
+              │
+              ▼
+        Quality sort & return top 15 cards
+```
+
+### Result
+Memory usage reduced from ~450MB (crashing) to ~120MB (stable), enabling reliable deployment on Railway's free tier.
+
+---
+
+## Deployment
+
+The application is deployed on **Railway** at:
+`https://<your-service>.up.railway.app`
+
+Environment variables are configured via the Railway dashboard (not committed to the repository). The `.env` file is listed in `.gitignore`.

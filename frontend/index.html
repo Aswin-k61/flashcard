@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashMind — AI-Powered Smart Flashcards</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Favicon placeholder or icon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+</head>
+<body>
+    <!-- Floating Decorative Background Orbs -->
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <div class="auth-page">
+        <div class="glass-card auth-card animate-slide-up">
+            <div class="auth-header">
+                <a href="#" class="logo">🎓 FlashMind</a>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">Study smarter with NLP-generated flashcards</p>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="auth-tabs">
+                <div class="auth-tab active" id="tab-login">Sign In</div>
+                <div class="auth-tab" id="tab-signup">Register</div>
+            </div>
+
+            <!-- Auth Form -->
+            <form class="auth-form" id="auth-form">
+                <!-- Name Group (hidden by default in Login Mode) -->
+                <div class="input-group" id="group-name" style="display: none;">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="Enter your name">
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required placeholder="name@domain.com">
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" required placeholder="••••••••">
+                        <span class="password-toggle" id="toggle-password">👁️</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="btn-submit" style="margin-top: 1rem; width: 100%;">
+                    <span id="submit-spinner" style="display: none; margin-right: 0.5rem;">⏳</span>
+                    <span id="submit-text">Sign In</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Core Utilities & Page logic -->
+    <script src="js/api.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

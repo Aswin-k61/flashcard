@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — FlashMind</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+</head>
+<body>
+    <!-- Navbar Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="dashboard.html" class="logo">🎓 FlashMind</a>
+            <div class="nav-actions">
+                <a href="create.html" class="btn btn-primary" style="padding: 0.55rem 1.1rem; font-size: 0.85rem;">+ New Set</a>
+                <div class="user-badge">
+                    <span>👤</span>
+                    <span id="nav-user-name">Student</span>
+                </div>
+                <button class="btn btn-secondary" id="btn-logout" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="dashboard-header animate-slide-up">
+            <div>
+                <h1 style="font-size: 2.2rem; margin-bottom: 0.4rem;">Welcome back, <span class="gradient-text" id="welcome-name">Student</span>!</h1>
+                <p style="color: var(--text-secondary);">Manage and review your study flashcard sets below.</p>
+            </div>
+            
+            <div style="display: flex; gap: 1rem;">
+                <div class="glass-card" style="padding: 0.75rem 1.25rem; border-radius: var(--radius-md); text-align: center;">
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">SETS</div>
+                    <div id="total-sets-badge" style="font-size: 1.25rem; font-weight: 800; font-family: var(--font-heading);">0 sets</div>
+                </div>
+                <div class="glass-card" style="padding: 0.75rem 1.25rem; border-radius: var(--radius-md); text-align: center;">
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">CARDS</div>
+                    <div id="total-cards-badge" style="font-size: 1.25rem; font-weight: 800; font-family: var(--font-heading);">0 cards</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State Container -->
+        <div class="glass-card empty-state animate-slide-up" id="empty-state" style="display: none;">
+            <div class="empty-icon">📝</div>
+            <h3>No Flashcard Sets Yet</h3>
+            <p>Paste or type your study notes to automatically generate a set of spaced-repetition flashcards using NLP.</p>
+            <a href="create.html" class="btn btn-primary">Create Your First Set</a>
+        </div>
+
+        <!-- Grid of Flashcard Sets -->
+        <div class="set-grid" id="set-grid">
+            <!-- Cards will be populated here by javascript -->
+        </div>
+    </main>
+
+    <!-- Delete Set Confirmation Modal Overlay -->
+    <div class="modal-overlay" id="delete-modal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 0.8rem; font-size: 1.3rem;">Delete Flashcard Set?</h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;">Are you sure you want to delete this flashcard set? This action will permanently delete the set and all of its cards. This cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="btn-cancel-delete">Cancel</button>
+                <button class="btn btn-danger" id="btn-confirm-delete">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Utilities & Page logic -->
+    <script src="js/api.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

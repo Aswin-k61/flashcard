@@ -1,0 +1,21 @@
+# Python files
+__pycache__/
+*.py[cod]
+*$py.class
+.venv
+venv/
+ENV/
+env/
+.env
+
+# IDEs and OS files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Model caches (if downloaded locally in folder)
+.cache/
+downloads/

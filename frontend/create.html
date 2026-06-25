@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Flashcards — FlashMind</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+</head>
+<body>
+    <!-- Navbar Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="dashboard.html" class="logo">🎓 FlashMind</a>
+            <div class="nav-actions">
+                <a href="dashboard.html" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">← Dashboard</a>
+                <div class="user-badge">
+                    <span>👤</span>
+                    <span id="nav-user-name">Student</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- PHASE 1: Text Input Form Panel -->
+        <div class="glass-card create-form-panel animate-slide-up" id="panel-input">
+            <div class="form-header">
+                <h1 style="font-size: 2rem; margin-bottom: 0.3rem;">✨ Generate Flashcards</h1>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">Paste your study notes below. Our NLP algorithm will identify core concepts, keywords, and entities to formulate questions.</p>
+            </div>
+
+            <div class="auth-form" style="gap: 1.5rem;">
+                <div class="input-group">
+                    <label for="title">Title (Optional)</label>
+                    <input type="text" id="title" placeholder="e.g. Biology - Photosynthesis Chapter 3">
+                </div>
+
+                <div class="input-group">
+                    <label for="notes">Study Notes / Paragraph</label>
+                    <textarea id="notes" placeholder="Paste your paragraph of notes here (minimum 50 characters required)..." style="min-height: 240px; resize: vertical; line-height: 1.5;"></textarea>
+                    <div class="character-counter" id="char-counter">0 / 5000 characters</div>
+                </div>
+
+                <!-- Guidance Tips Card -->
+                <div class="tip-box">
+                    <div class="tip-box-icon">💡</div>
+                    <div>
+                        <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.2rem;">For Best NLP Results:</h4>
+                        <p>Paste paragraphs with dense factual statements (definitions, key dates, names, processes, relationships). The model works best with well-structured, grammatical sentences.</p>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" id="btn-generate" disabled style="width: 100%; padding: 0.95rem; font-size: 1rem; margin-top: 0.5rem;">
+                    🧠 Generate Flashcards
+                </button>
+            </div>
+        </div>
+
+        <!-- LOADING PHASE PANEL: Displayed while NLP is processing -->
+        <div class="glass-card loading-overlay animate-slide-up" id="panel-loading" style="display: none;">
+            <div class="brain-pulse">🧠</div>
+            <h3 style="font-size: 1.5rem;">Processing Notes</h3>
+            <div class="loading-bar"></div>
+            <div class="loading-message" id="loading-message">Analyzing study notes...</div>
+        </div>
+
+        <!-- PHASE 2: Preview & Edit Panel -->
+        <div id="panel-preview" style="display: none;">
+            <div class="animate-slide-up" style="margin-bottom: 2rem;">
+                <h1 style="font-size: 2rem; margin-bottom: 0.3rem;" id="preview-count-text">Flashcards Generated!</h1>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">Review, edit, or delete individual cards below before saving them to your dashboard.</p>
+            </div>
+
+            <!-- Vertical list of editable card previews -->
+            <div class="preview-container animate-slide-up" id="preview-cards-list">
+                <!-- Javascript will populate card list here -->
+            </div>
+
+            <!-- Final Save Actions -->
+            <div class="animate-slide-up" style="display: flex; gap: 1rem; margin-top: 2rem; justify-content: flex-end;">
+                <button class="btn btn-secondary" id="btn-regenerate">← Back & Edit Notes</button>
+                <button class="btn btn-primary" id="btn-save-set" style="padding: 0.85rem 2rem;">💾 Save Set & Finish</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Core Utilities & Page logic -->
+    <script src="js/api.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/create.js"></script>
+</body>
+</html>

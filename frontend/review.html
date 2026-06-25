@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Session — FlashMind</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+</head>
+<body>
+    <!-- Navbar Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="dashboard.html" class="logo">🎓 FlashMind</a>
+            <div class="nav-actions">
+                <a href="dashboard.html" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">← Dashboard</a>
+                <div class="user-badge">
+                    <span>👤</span>
+                    <span id="nav-user-name">Student</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="review-wrapper">
+            
+            <!-- ACTIVE REVIEW SESSION PANEL -->
+            <div id="review-session-panel">
+                <div class="animate-slide-up" style="margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.5rem;">
+                        <div>
+                            <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">REVIEWING SET</span>
+                            <h2 style="font-size: 1.5rem; line-height: 1.2;" id="set-title">Study Set</h2>
+                        </div>
+                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);" id="card-progress-text">Card 1 of 10</span>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <!-- 3D Flipping Flashcard Scene -->
+                <div class="flashcard-scene animate-slide-up" id="flashcard-scene">
+                    <div class="flashcard-inner">
+                        <!-- FRONT FACE: QUESTION -->
+                        <div class="glass-card flashcard-face flashcard-front">
+                            <div class="flashcard-tag gradient-text">Question</div>
+                            <div class="flashcard-content-text" id="card-question">What is photosynthesis?</div>
+                            <div class="flashcard-hint">Click card to reveal answer (or press Space)</div>
+                        </div>
+                        
+                        <!-- BACK FACE: ANSWER -->
+                        <div class="glass-card flashcard-face flashcard-back">
+                            <div class="flashcard-tag" style="color: var(--accent-cyan);">Answer</div>
+                            <div class="flashcard-content-text" id="card-answer">Photosynthesis is the process by which plants convert light energy into chemical energy.</div>
+                            <div class="flashcard-hint" style="color: var(--text-muted);">How well did you know this?</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action buttons below card (hidden until flipped) -->
+                <div class="review-actions" id="review-actions">
+                    <button class="btn btn-danger" id="btn-not-known">
+                        <span>✗</span> Not Known
+                    </button>
+                    <button class="btn btn-success" id="btn-known">
+                        <span>✓</span> Known
+                    </button>
+                </div>
+
+                <!-- Session Stats Bar -->
+                <div class="animate-slide-up" style="margin-top: 2rem; display: flex; justify-content: center; gap: 2rem; border-top: 1px solid var(--border-glass); padding-top: 1.25rem;">
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                        Known: <span style="font-weight: 700; color: var(--success);" id="session-known-count">0</span>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                        Not Known: <span style="font-weight: 700; color: var(--danger);" id="session-not-known-count">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SESSION COMPLETE PANEL (hidden by default) -->
+            <div class="glass-card complete-card animate-slide-up" id="panel-complete" style="display: none;">
+                <div class="complete-icon">🎉</div>
+                <h2 style="font-size: 2rem; margin-bottom: 0.2rem;">Session Complete!</h2>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">Great job! Here is your performance breakdown for this session:</p>
+
+                <!-- Accuracy Donut Chart -->
+                <div class="stats-circle-container">
+                    <svg width="160" height="160" viewBox="0 0 160 160">
+                        <circle class="stats-circle-bg" cx="80" cy="80" r="70"></circle>
+                        <circle class="stats-circle-val" cx="80" cy="80" r="70"></circle>
+                    </svg>
+                    <span class="stats-circle-text" id="stats-percentage-val">0%</span>
+                </div>
+
+                <!-- Breakdown Numbers -->
+                <div class="complete-breakdown">
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">TOTAL REVIEWED</span>
+                        <span class="breakdown-val" id="stats-total-count">0</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">KNOWN</span>
+                        <span class="breakdown-val known" id="stats-known-count">0</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">NOT KNOWN</span>
+                        <span class="breakdown-val not-known" id="stats-not-known-count">0</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; width: 100%;">
+                    <button class="btn btn-secondary" id="btn-review-again" style="flex: 1;">Review Again</button>
+                    <button class="btn btn-primary" id="btn-back-dashboard" style="flex: 1;">To Dashboard</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Core Utilities & Page logic -->
+    <script src="js/api.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/review.js"></script>
+</body>
+</html>

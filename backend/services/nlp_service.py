@@ -26,7 +26,7 @@ from nltk.corpus import stopwords
 from nltk.tag import pos_tag
 from nltk.chunk import tree2conlltags
 
-from sklearn.feature_extraction.text import TfidfVectorizer
+
 
 # --------------------------------------------------------------------------- #
 # Transformer model (lazy-loaded)
@@ -97,25 +97,17 @@ def _is_good_sentence(sentence: str) -> bool:
 # --------------------------------------------------------------------------- #
 
 def extract_keywords_tfidf(text: str, top_n: int = 20) -> List[str]:
-    sentences = sent_tokenize(text)
-    if not sentences:
-        return []
     try:
-        vec   = TfidfVectorizer(stop_words='english', max_features=top_n,
-                                ngram_range=(1, 2))       # ← bigrams too
-        mat   = vec.fit_transform(sentences)
-        names = vec.get_feature_names_out()
-        sums  = mat.sum(axis=0).A1
-        ranked = sorted(zip(names, sums), key=lambda x: x[1], reverse=True)
-        return [w for w, _ in ranked if len(w) > 3]
-    except Exception as e:
-        logger.warning(f"TF-IDF failed: {e}")
-        stops    = set(stopwords.words('english'))
-        words    = [w.lower() for w in word_tokenize(text)
-                    if w.isalnum() and len(w) > 3]
-        filtered = [w for w in words if w not in stops]
+        stops = set(stopwords.words('english'))
+        words = [
+            w.lower() for w in word_tokenize(text)
+            if w.isalnum() and len(w) > 3 and w.lower() not in stops
+        ]
         from collections import Counter
-        return [w for w, _ in Counter(filtered).most_common(top_n)]
+        return [w for w, _ in Counter(words).most_common(top_n)]
+    except Exception as e:
+        logger.warning(f"Keyword extraction failed: {e}")
+        return []
 
 
 def extract_entities_nltk(text: str) -> List[str]:

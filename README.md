@@ -164,6 +164,6 @@ Memory usage reduced from ~450MB (crashing) to ~120MB (stable), enabling reliabl
 ## Deployment
 
 The application is deployed on **Railway** at:
-`https://<your-service>.up.railway.app`
+`https://flashcard-production-f269.up.railway.app`
 
 Environment variables are configured via the Railway dashboard (not committed to the repository). The `.env` file is listed in `.gitignore`.

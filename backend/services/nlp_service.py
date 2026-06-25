@@ -161,27 +161,20 @@ def extract_noun_phrases(text: str) -> List[str]:
 
 def generate_t5_question(answer: str, context: str) -> str:
     try:
-        prompt = f"""
-Generate ONE educational question.
-
+        prompt = f"""Generate ONE educational question.
 Answer: {answer}
-
-Context:
-{context}
-
-Question:
-"""
+Context: {context}
+Question:"""
 
         result = client.text_generation(
             prompt,
             model="google/flan-t5-small",
             max_new_tokens=50
         )
-
         return result.strip()
 
     except Exception as e:
-        logger.error(f"HF API generation error: {e}")
+        logger.error(f"HF API generation error: {type(e).__name__}: {e}")  # ← log full error
         return ""
 
 
